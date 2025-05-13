@@ -1,0 +1,104 @@
+Normalization Example - 4347 Final Project
+
+All tables below are presented in Third Normal Form (3NF). Primary keys and foreign keys are clearly identified, and multi-valued and many-to-many relationships have been resolved appropriately. This file serves as a concise normalization reference.
+
+Person
+Person(PersonalID, FirstName, LastName, Age, Gender, AddressLine1, AddressLine2, City, State, ZipCode)
+● PersonalID is the PK
+● Stores shared person attributes for all roles
+
+PhoneNumber
+PhoneNumber(PersonalID, PhoneNumber)
+● Composite PK: (PersonalID, PhoneNumber)
+● PersonalID is FK → Person
+● Handles multi-valued attribute (one person, many phone numbers)
+
+Employee
+Employee(PersonalID, Rank, Title, SupervisorID)
+● PersonalID is PK, FK → Person
+● SupervisorID is FK → Employee.PersonalID
+● Captures recursive 1:N supervisory relationship
+
+Customer
+Customer(PersonalID, PreferredSalesRepID)
+● PersonalID is PK, FK → Person
+● PreferredSalesRepID is FK → Employee
+
+PotentialEmployee
+PotentialEmployee(PersonalID)
+● PersonalID is PK, FK → Person
+
+Department
+Department(DepartmentID, DepartmentName)
+● DepartmentID is PK
+
+DepartmentAssignment
+DepartmentAssignment(EmpID, DepartmentID, StartDate, EndDate)
+● Composite PK: (EmpID, DepartmentID, StartDate)
+● EmpID is FK → Employee
+● DepartmentID is FK → Department
+
+JobPosition
+JobPosition(JobID, JobDescription, PostedDate, DepartmentID)
+● JobID is PK
+● DepartmentID is FK → Department
+
+Application
+Application(ApplicationID, PersonalID, JobID)
+● ApplicationID is PK
+● PersonalID is FK → Person
+● JobID is FK → JobPosition
+
+Interview
+Interview(InterviewID, InterviewTime, Grade, JobID, IntervieweeID, InterviewerID)
+● InterviewID is PK
+● JobID is FK → JobPosition
+● IntervieweeID is FK → Person
+● InterviewerID is FK → Employee
+
+Product
+Product(ProductID, ProductType, Size, ListPrice, Weight, Style)
+● ProductID is PK
+
+Part
+Part(PartID, PartName, Weight)
+● PartID is PK
+
+ProductPart
+ProductPart(ProductID, PartID, QuantityUsed)
+● Composite PK: (ProductID, PartID)
+● ProductID is FK → Product
+● PartID is FK → Part
+
+Vendor
+Vendor(VendorID, VendorName, AddressLine1, AddressLine2, City, State, ZipCode, AccountNumber, CreditRating, WebServiceURL)
+● VendorID is PK
+
+VendorPart
+VendorPart(VendorID, PartID, Price)
+● Composite PK: (VendorID, PartID)
+● VendorID is FK → Vendor
+● PartID is FK → Part
+
+MarketingSite
+MarketingSite(SiteID, SiteName, SiteLocation)
+● SiteID is PK
+
+SiteAssignment
+SiteAssignment(SiteID, PersonalID)
+● Composite PK: (SiteID, PersonalID)
+● SiteID is FK → MarketingSite
+● PersonalID is FK → Person
+
+Sale
+Sale(SaleID, SaleTime, ProductID, CustomerID, SalesmanID, SiteID)
+● SaleID is PK
+● ProductID is FK → Product
+● CustomerID is FK → Customer
+● SalesmanID is FK → Employee
+● SiteID is FK → MarketingSite
+
+SalaryTransaction
+SalaryTransaction(TransactionNumber, EmpID, PayDate, Amount)
+● Composite PK: (TransactionNumber, EmpID)
+● EmpID is FK → Employee
